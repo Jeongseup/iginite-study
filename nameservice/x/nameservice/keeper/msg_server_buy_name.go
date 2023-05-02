@@ -52,5 +52,17 @@ func (k msgServer) BuyName(goCtx context.Context, msg *types.MsgBuyName) (*types
 		}
 	}
 
+	// Create an updated whois record
+	newWhois := types.Whois{
+		Index: msg.Name,
+		Name:  msg.Name,
+		Value: whois.Value,
+		Price: bid.String(),
+		Owner: buyer.String(),
+	}
+
+	// Write whois information to the store
+	k.SetWhois(ctx, newWhois)
+
 	return &types.MsgBuyNameResponse{}, nil
 }
